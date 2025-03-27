@@ -3,5 +3,5 @@ cc_library(
 	deps = [
 		"//src/core:grace-core",
 	],
-	visibility = ["//:__pkg__"]
+	visibility = ["//:__pkg__", "//tests/lexer:__pkg__"]
 )

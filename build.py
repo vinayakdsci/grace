@@ -16,22 +16,49 @@ logger.addHandler(stream_handler)
 logger.setLevel(logging.INFO)
 
 
+def _error(e):
+    logger.error(e.__str__())
+
+
 def run_tests(test_suite_sections: list[str]):
-    if len(test_suite_sections) == 1 and "all" in test_suite_sections:
-        raise RuntimeError("Only `all` mode is supported for `--run-tests` currently")
+
+    if "all" in test_suite_sections:
+        # Keep adding more test sections here as the suite grows.
+        test_suite_sections = ["lexer"]
+
+    logger.info(f"Running tests for sections {test_suite_sections}")
+
+    for section in test_suite_sections:
+        process = subprocess.run(
+            [
+                "bazelisk",
+                "test",
+                f"//tests/{section}:grace_{section}_tests",
+                "--cache_test_results=no",
+            ],
+            capture_output=True,
+        )
+
+        try:
+            process.check_returncode()
+            logger.info(f"{process.stdout.decode()}")
+            logger.info(
+                f"SUCCESS: Command [{' '.join(process.args)}] succeeded with exit-code {process.returncode}"
+            )
+        except:
+            logger.error(
+                f"Test run for section `{section}` failed with exit-code {process.returncode}\n{process.stderr.decode()}"
+            )
 
 
 def build_grace(args):
-    if args.run_tests:
-        # TODO (vinayakdsci): Implement test runs when the test-suite is wired up.
-        raise NotImplementedError("Unsupported: test-suite runs are not supported yet")
-
     logger.info("Starting build...")
+    logger.info(f"ARGS: {args}")
     bzl_cmd = None
     try:
         bzl_cmd = find_bzl_binary()
     except Exception as e:
-        logger.error(e.__str__())
+        _error(e)
         raise
 
     # Invoke a subprocess running bazelisk.
@@ -45,12 +72,23 @@ def build_grace(args):
         process.check_returncode()
     except:
         logger.error(
-            f"Process return with exit-code {process.returncode}. {process.stderr.decode()}"
+            f"Process failed with exit-code {process.returncode}\n{process.stderr.decode()}"
         )
         raise
 
     assert os.path.exists(os.path.join("bazel-bin", "grc"))
-    logger.info(f"SUCCESS. Build succeeded with exit-code {process.returncode}")
+    logger.info(
+        f"SUCCESS: Command [{' '.join(process.args)}] succeeded with exit-code {process.returncode}"
+    )
+
+    if isinstance(args.run_tests, list):
+        if len(args.run_tests) == 0:
+            args.run_tests = ["all"]
+        try:
+            run_tests(args.run_tests)
+            return
+        except Exception as e:
+            _error(e)
 
 
 def find_bzl_binary():
@@ -70,11 +108,12 @@ if __name__ == "__main__":
     parser.add_argument(
         "--run-tests",
         type=str,
-        # nargs="+",
+        nargs="*",
+        default="",
         choices=["all"],
     )
 
     try:
         build_grace(parser.parse_args())
     except Exception as e:
-        logger.error(e.__str__())
+        _error(e)
