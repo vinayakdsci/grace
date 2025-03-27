@@ -10,9 +10,10 @@ Grace program files end with extension `grc`. The compiler does not yet implemen
 ### Building the source
 
 The build system for the Grace compiler uses `bazel`, and the preferred and recommended installation channel is `bazelisk`. To build the compiler binary, `grc`, run:
+For convenience, we provide a build script implemented in Python, which should handle the whole build process.
 
 ```sh
-$ bazelisk build :grc
+$ ./build.py
 ```
 
 This command should produce the `grc` binary under the path `./bazel-bin/grc` relative to the top-level directory.
@@ -20,7 +21,7 @@ This command should produce the `grc` binary under the path `./bazel-bin/grc` re
 ### Testing
 We use the GTest framework for unit-testing the compiler's source code. Tests can be run with:
 ```sh
-$ bazelisk test //tests:grc_tests
+$ ./build.py --run-tests ## Equivalent to `--run-tests "all"`
 ```
 which will run the whole test-suite. The build system will soon be able to support running independent test-sets separately, so that isolated changes do not require running the while test-suite.
 
