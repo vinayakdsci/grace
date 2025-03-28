@@ -77,7 +77,9 @@ def build_grace(args):
         )
         raise
 
-    assert os.path.exists(os.path.join("bazel-bin", "grc"))
+    grc_bin = "grc.exe" if "win32" in sys.platform else "grc"
+
+    assert os.path.exists(os.path.join("bazel-bin", grc_bin))
     logger.info(
         f"SUCCESS: Command [{' '.join(process.args)}] succeeded with exit-code {process.returncode}"
     )
