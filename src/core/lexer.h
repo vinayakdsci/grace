@@ -15,7 +15,7 @@ typedef struct lexer_t {
 } lexer_t;
 
 lexer_t *init_lexer(const char *source);
-token_t *lex_next_token();
+token_t *lex_next_token(lexer_t **lexer_ptr);
 
 void free_lexer(lexer_t **lexer_ptr);
 

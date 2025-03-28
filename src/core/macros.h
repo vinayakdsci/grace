@@ -12,4 +12,9 @@
 
 #define GRACE_ASSERT(condition, message) assert(condition&& message)
 
+#define GRACE_TODO(message) assert(false && message)
+
+#define GRACE_UNREACHABLE \
+  assert(false && "UNREACHABLE: Control flow is forbidden on this path.");
+
 #endif

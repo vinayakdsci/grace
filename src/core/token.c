@@ -39,3 +39,12 @@ void free_token(token_t **token_ptr) {
   free(*token_ptr);
   *token_ptr = NULL;
 }
+
+token_t *init_and_set_token(unsigned int col, unsigned long long line,
+                            token_type_t token_type,
+                            const char *token_literal) {
+  token_t *token = init_token();
+  set_token_attrs(token, col, line, token_type, token_literal);
+
+  return token;
+}

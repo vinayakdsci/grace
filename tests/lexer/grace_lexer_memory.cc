@@ -16,6 +16,11 @@ TEST(GraceLexerMemoryTests, AllocateAndFreeToken) {
 
   free_token(&token);
   ASSERT_TRUE(token == NULL);
+
+  token_t *tok = init_and_set_token(0, 0, TOKEN_EOF, "EOF");
+  ASSERT_TRUE(!strcmp(tok->token_literal_, "EOF"));
+
+  free_token(&tok);
 }
 
 TEST(GraceLexerMemoryTests, AllocateAndFreeLexer) {

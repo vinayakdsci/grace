@@ -35,6 +35,7 @@ def run_tests(test_suite_sections: list[str]):
                 "test",
                 f"//tests/{section}:grace_{section}_tests",
                 "--cache_test_results=no",
+                "--test_output=all",
             ],
             capture_output=True,
         )

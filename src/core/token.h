@@ -14,6 +14,10 @@ typedef enum token_type_t {
   TOKEN_NUMBER,
   TOKEN_IDENT,
 
+  // Keywords
+  TOKEN_LET,
+  TOKEN_FN,
+
   // Punctuation.
   TOKEN_SEMICOLON,
   TOKEN_COMMA,
@@ -34,7 +38,11 @@ typedef struct token_t {
 
 token_t *init_token();
 void free_token(token_t **token_ptr);
+
 void set_token_attrs(token_t *token_ptr, unsigned int col,
                      unsigned long long line, token_type_t token_type,
                      const char *token_literal);
+
+token_t *init_and_set_token(unsigned int col, unsigned long long line,
+                            token_type_t token_type, const char *token_literal);
 #endif
