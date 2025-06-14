@@ -11,7 +11,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 #include "grace/frontend/lexer.h"
 
 #include <string>
@@ -67,23 +66,23 @@ Token Lexer::next() {
   }
 
   switch (curr_) {
-    case '+':
-      return Token(TokenType::Plus);
-    case '-':
-      return Token(TokenType::Minus);
-    case '*':
-      return Token(TokenType::Star);
-    case '/':
-      return Token(TokenType::Slash);
-    default:
-      if (utils::isDigit(curr_)) {
-        return lexNumber();
-      }
+  case '+':
+    return Token(TokenType::Plus);
+  case '-':
+    return Token(TokenType::Minus);
+  case '*':
+    return Token(TokenType::Star);
+  case '/':
+    return Token(TokenType::Slash);
+  default:
+    if (utils::isDigit(curr_)) {
+      return lexNumber();
+    }
 
-      std::string msg = "Unsupported token encountered:" + std::string{curr_};
-      llvm_unreachable(msg.c_str());
+    std::string msg = "Unsupported token encountered:" + std::string{curr_};
+    llvm_unreachable(msg.c_str());
   }
 }
 
-}  // namespace frontend
-}  // namespace grace
+} // namespace frontend
+} // namespace grace
