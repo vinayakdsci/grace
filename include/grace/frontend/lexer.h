@@ -12,12 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#ifndef GRACE_INCLUDE_LEXER_H_
+#define GRACE_INCLUDE_LEXER_H_
+
 #include "grace/frontend/token.h"
 
 namespace grace {
 namespace frontend {
 class Lexer {
- public:
+public:
   Lexer(const char *source)
       : source_(source), line_(1), start_(source), offset_(source) {}
   Lexer(const Lexer &) = delete;
@@ -27,7 +30,7 @@ class Lexer {
 
   const bool eof() const { return *offset_ == '\0'; }
 
- private:
+private:
   const char advance() {
     offset_++;
     return offset_[-1];
@@ -53,5 +56,6 @@ class Lexer {
   const char *offset_;
   char curr_;
 };
-}  // namespace frontend
-}  // namespace grace
+} // namespace frontend
+} // namespace grace
+#endif

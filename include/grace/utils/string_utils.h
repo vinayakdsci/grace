@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef GRACE_INCLUDE_UTILS_STRING_UTILS_H_
-#define GRACE_INCLUDE_UTILS_STRING_UTILS_H_
+#ifndef GRACE_UTILS_STRING_UTILS_H_
+#define GRACE_UTILS_STRING_UTILS_H_
 
 namespace grace {
 namespace utils {
@@ -32,10 +32,10 @@ inline const bool isWhiteSpace(const char ch) {
   return ch == ' ' || ch == '\t';
 }
 inline const bool isAsciiWhitespace(const char ch) {
-  return isWhiteSpace(ch) || ch == '\n' || ch == '\t';
+  return isWhiteSpace(ch) || ch == '\n' || ch == '\r';
 }
 
-}  // namespace utils
-}  // namespace grace
+} // namespace utils
+} // namespace grace
 
 #endif
