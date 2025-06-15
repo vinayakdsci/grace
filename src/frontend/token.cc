@@ -13,6 +13,7 @@
 // limitations under the License.
 #include "grace/frontend/token.h"
 
+#include <iostream>
 #include <string>
 
 namespace grace {
@@ -56,6 +57,23 @@ std::string ConstantValue::toString() {
   return s;
 }
 
+void ConstantValue::print(std::ostream &ostream) { ostream << toString(); }
+void ConstantValue::print(llvm::raw_ostream &ostream) { ostream << toString(); }
+void ConstantValue::print(llvm::raw_fd_ostream &ostream) {
+  ostream << toString();
+}
+void ConstantValue::print(std::ostream &ostream, const char end) {
+  ostream << toString() << end;
+}
+void ConstantValue::print(llvm::raw_ostream &ostream, const char end) {
+  ostream << toString() << end;
+}
+void ConstantValue::print(llvm::raw_fd_ostream &ostream, const char end) {
+  ostream << toString() << end;
+}
+void ConstantValue::dump() { print(std::cout); }
+void ConstantValue::dump(const char end) { print(std::cout, end); }
+
 ///////////////////////////////////////////////////////////
 /// Token
 //////////////////////////////////////////////////////////
@@ -90,6 +108,21 @@ std::string Token::toString() {
   s = "{Token: " + tokTypeToStr() + "}";
   return s;
 }
+
+void Token::print(std::ostream &ostream) { ostream << toString(); }
+void Token::print(llvm::raw_ostream &ostream) { ostream << toString(); }
+void Token::print(llvm::raw_fd_ostream &ostream) { ostream << toString(); }
+void Token::print(std::ostream &ostream, const char end) {
+  ostream << toString() << end;
+}
+void Token::print(llvm::raw_ostream &ostream, const char end) {
+  ostream << toString() << end;
+}
+void Token::print(llvm::raw_fd_ostream &ostream, const char end) {
+  ostream << toString() << end;
+}
+void Token::dump() { print(std::cout); }
+void Token::dump(const char end) { print(std::cout, end); }
 
 } // namespace frontend
 } // namespace grace

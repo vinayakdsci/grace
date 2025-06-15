@@ -30,6 +30,8 @@ public:
 
   const bool eof() const { return *offset_ == '\0'; }
 
+  explicit operator bool() { return !eof(); }
+
 private:
   const char advance() {
     offset_++;

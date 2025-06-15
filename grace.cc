@@ -11,9 +11,9 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-#include <iostream>
-
 #include "grace/frontend/lexer.h"
+#include <iostream>
+#include <llvm/Support/raw_ostream.h>
 
 namespace frontend = grace::frontend;
 
@@ -21,15 +21,13 @@ int main() {
   const char *source = "   23.44 * / 1 + 1+ 1.11";
   frontend::Lexer lexer = frontend::Lexer(source);
 
-  while (true) {
-    frontend::Token token = lexer.next();
-    std::cout << token.toString() << "\n";
-    if (lexer.eof()) {
-      token = lexer.next();
-      std::cout << token.toString() << "\n";
-      break;
-    }
+  while (lexer) {
+    lexer.next().dump('\n');
   }
+
+  // We should be at EOF now.
+  lexer.next().dump('\n');
+
   std::cout << "[END]" << std::endl;
   return 0;
 }

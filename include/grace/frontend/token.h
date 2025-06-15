@@ -16,6 +16,7 @@
 #define GRACE_INCLUDE_TOKEN_H_
 
 #include <llvm/Support/ErrorHandling.h>
+#include <llvm/Support/raw_ostream.h>
 
 #include <cassert>
 #include <optional>
@@ -25,7 +26,7 @@ union ConstantValueContents {
   double float_constant_;
   long long int_constant_;
 };
-}  // namespace
+} // namespace
 
 namespace grace {
 namespace frontend {
@@ -67,27 +68,35 @@ struct ConstantValue {
 
   const ConstantTag tag() const { return type_tag_; }
 
-  const bool operator==(ConstantValue& other) const {
+  const bool operator==(ConstantValue &other) const {
     if (type_tag_ != other.tag()) {
       return false;
     }
 
     switch (type_tag_) {
-      case IntegerConstant:
-        return contents_.int_constant_ == other.intConstant();
-      case FloatConstant:
-        return contents_.float_constant_ == other.floatConstant();
-      default:
-        llvm_unreachable("Unsupported constant type.");
+    case IntegerConstant:
+      return contents_.int_constant_ == other.intConstant();
+    case FloatConstant:
+      return contents_.float_constant_ == other.floatConstant();
+    default:
+      llvm_unreachable("Unsupported constant type.");
     }
   }
 
   std::string toString();
+  void print(std::ostream &ostream);
+  void print(llvm::raw_ostream &ostream);
+  void print(llvm::raw_fd_ostream &ostream);
+  void print(std::ostream &ostream, const char end);
+  void print(llvm::raw_ostream &ostream, const char end);
+  void print(llvm::raw_fd_ostream &ostream, const char end);
+  void dump();
+  void dump(const char end);
 
-  const double& floatConstant() const;
-  const long long& intConstant() const;
+  const double &floatConstant() const;
+  const long long &intConstant() const;
 
- private:
+private:
   ConstantTag type_tag_;
   ConstantValueContents contents_;
 };
@@ -99,13 +108,13 @@ struct Token {
   Token(TokenType tt, double float_constant)
       : token_type_(tt), constant_token_value_(ConstantValue(float_constant)) {}
 
-  const TokenType& tokenType() const { return token_type_; }
+  const TokenType &tokenType() const { return token_type_; }
 
-  const std::optional<ConstantValue>& constantTokenValue() const {
+  const std::optional<ConstantValue> &constantTokenValue() const {
     return constant_token_value_;
   }
 
-  const bool operator==(Token& other) const {
+  const bool operator==(Token &other) const {
     if (token_type_ != other.tokenType()) {
       return false;
     }
@@ -116,16 +125,24 @@ struct Token {
       return true;
     }
     return *constant_token_value_ ==
-           const_cast<ConstantValue&>(other.constantTokenValue().value());
+           const_cast<ConstantValue &>(other.constantTokenValue().value());
   }
 
   std::string toString();
+  void print(std::ostream &ostream);
+  void print(llvm::raw_ostream &ostream);
+  void print(llvm::raw_fd_ostream &ostream);
+  void print(std::ostream &ostream, const char end);
+  void print(llvm::raw_ostream &ostream, const char end);
+  void print(llvm::raw_fd_ostream &ostream, const char end);
+  void dump();
+  void dump(const char end);
 
- private:
+private:
   TokenType token_type_;
   std::optional<ConstantValue> constant_token_value_;
 };
 
-}  // namespace frontend
-}  // namespace grace
+} // namespace frontend
+} // namespace grace
 #endif
