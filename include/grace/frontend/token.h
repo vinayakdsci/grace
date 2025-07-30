@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef GRACE_INCLUDE_TOKEN_H_
-#define GRACE_INCLUDE_TOKEN_H_
+#ifndef GRACE_TOKEN_H_
+#define GRACE_TOKEN_H_
 
 #include <llvm/Support/ErrorHandling.h>
 #include <llvm/Support/raw_ostream.h>

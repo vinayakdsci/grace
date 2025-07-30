@@ -20,6 +20,7 @@
 set(GRCC_FRONTEND_SRC_FILES
 	token.cc
 	lexer.cc
+	parser.cc
 )
 
 add_library(grcc_frontend ${GRCC_FRONTEND_SRC_FILES})

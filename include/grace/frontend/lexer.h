@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef GRACE_INCLUDE_LEXER_H_
-#define GRACE_INCLUDE_LEXER_H_
+#ifndef GRACE_LEXER_H_
+#define GRACE_LEXER_H_
 
 #include "grace/frontend/token.h"
 
@@ -53,9 +53,9 @@ private:
   Token lexNumber();
 
   const char *const source_;
-  unsigned int line_;
   const char *start_;
   const char *offset_;
+  unsigned int line_;
   char curr_;
 };
 } // namespace frontend
