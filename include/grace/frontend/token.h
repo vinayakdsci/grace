@@ -68,7 +68,56 @@ struct ConstantValue {
 
   const ConstantTag tag() const { return type_tag_; }
 
-  const bool operator==(ConstantValue &other) const {
+  ConstantValue operator+(ConstantValue other) {
+    if (other.isFloatConstant() && this->isFloatConstant()) {
+      return ConstantValue(other.floatConstant() + this->floatConstant());
+    }
+    if (other.isIntegerConstant() && this->isIntegerConstant()) {
+      return ConstantValue(other.intConstant() + this->intConstant());
+    }
+
+    llvm_unreachable("Invalid operands to operation '+'. Only two integral or "
+                     "float values can be added.");
+  }
+
+  ConstantValue operator-(ConstantValue other) {
+    if (other.isFloatConstant() && this->isFloatConstant()) {
+      return ConstantValue(this->floatConstant() - other.floatConstant());
+    }
+    if (other.isIntegerConstant() && this->isIntegerConstant()) {
+      return ConstantValue(this->intConstant() - other.intConstant());
+    }
+
+    llvm_unreachable("Invalid operands to operation '-'. Only two integral or "
+                     "float values can be subtracted.");
+  }
+
+  ConstantValue operator/(ConstantValue other) {
+    if (other.isFloatConstant() && this->isFloatConstant()) {
+      return ConstantValue(this->floatConstant() / other.floatConstant());
+    }
+    if (other.isIntegerConstant() && this->isIntegerConstant()) {
+      return ConstantValue(this->intConstant() / other.intConstant());
+    }
+
+    llvm_unreachable("Invalid operands to operation '/'. Only two integral or "
+                     "float values can be divided.");
+  }
+
+  ConstantValue operator*(ConstantValue other) {
+    if (other.isFloatConstant() && this->isFloatConstant()) {
+      return ConstantValue(other.floatConstant() * this->floatConstant());
+    }
+    if (other.isIntegerConstant() && this->isIntegerConstant()) {
+      return ConstantValue(other.intConstant() * this->intConstant());
+    }
+    if (other.isIntegerConstant() && this->isFloatConstant()) {
+      return ConstantValue(other.intConstant() * this->floatConstant());
+    }
+    return other.floatConstant() * this->intConstant();
+  }
+
+  const bool operator==(ConstantValue other) const {
     if (type_tag_ != other.tag()) {
       return false;
     }

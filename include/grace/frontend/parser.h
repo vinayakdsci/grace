@@ -22,8 +22,12 @@ namespace grace {
 namespace frontend {
 
 class Parser {
+public:
+  Parser(Lexer *lexer) : lexer_(lexer), current_({}), previous_({}) {}
+  ConstantValue eval();
+
 private:
-  Lexer lexer_;
+  Lexer *lexer_;
   Token current_;
   Token previous_;
   void advance();
@@ -34,6 +38,7 @@ private:
 
   template <TokenType T, TokenType... Ts> bool match();
 
+  std::unique_ptr<Expression> parseConstantLiteral();
   std::unique_ptr<Expression> parseExpression();
   std::unique_ptr<Expression> parseUnary();
   std::unique_ptr<Expression> parsePrimary();
@@ -44,7 +49,7 @@ private:
       {TokenType::Plus, 20},
       {TokenType::Minus, 20},
       {TokenType::Star, 40},
-      {TokenType::Slash, 40},
+      {TokenType::Slash, 50},
   };
 };
 

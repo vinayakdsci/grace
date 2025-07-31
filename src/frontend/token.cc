@@ -14,6 +14,8 @@
 #include "grace/frontend/token.h"
 
 #include <iostream>
+#include <llvm/Support/ErrorHandling.h>
+#include <llvm/Support/raw_ostream.h>
 #include <string>
 
 namespace grace {

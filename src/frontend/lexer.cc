@@ -12,10 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 #include "grace/frontend/lexer.h"
-
-#include <string>
-
 #include "grace/utils/string_utils.h"
+#include <llvm/Support/ErrorHandling.h>
+#include <llvm/Support/raw_ostream.h>
+#include <string>
 
 namespace grace {
 namespace frontend {

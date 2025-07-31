@@ -28,14 +28,14 @@ class UnaryExpression;
 class Expression {
 public:
   virtual ~Expression() = default;
-  virtual void accept(Expression *expression) = 0;
+  virtual ConstantValue accept() = 0;
 };
 
 class IntegerExpression : public Expression {
 public:
   IntegerExpression(long long value) : value_(value) {}
 
-  void accept(Expression *visitor) override { visitor->accept(this); }
+  ConstantValue accept() override;
 
 private:
   long long value_;
@@ -45,7 +45,7 @@ class FloatExpression : public Expression {
 public:
   FloatExpression(double value) : value_(value) {}
 
-  void accept(Expression *visitor) override { visitor->accept(this); }
+  ConstantValue accept() override;
 
 private:
   double value_;
@@ -57,7 +57,7 @@ public:
                    std::unique_ptr<Expression> right)
       : left_(std::move(left)), op_(op), right_(std::move(right)) {}
 
-  void accept(Expression *visitor) { visitor->accept(this); }
+  ConstantValue accept() override;
 
 private:
   std::unique_ptr<Expression> left_;

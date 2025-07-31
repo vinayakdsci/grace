@@ -13,6 +13,8 @@
 // limitations under the License.
 
 #include "grace/frontend/parser.h"
+#include <llvm/Support/ErrorHandling.h>
+#include <llvm/Support/raw_ostream.h>
 
 namespace {
 void throwAndSynchronize() {}
@@ -33,7 +35,7 @@ void Parser::advance() {
   previous_ = current_;
 
   for (;;) {
-    current_ = lexer_.next();
+    current_ = lexer_->next();
     if (current_.tokenType() != TokenType::Error) {
       break;
     }
@@ -67,6 +69,7 @@ template <TokenType T, TokenType... Ts> void Parser::expect(const char *err) {
 
 std::unique_ptr<Expression> Parser::parseExpression() {
   // expression := primary | binary
+  advance();
   auto lhs = parsePrimary();
   if (!lhs) {
     return nullptr;
@@ -119,6 +122,42 @@ Parser::parseBinary(int prec, std::unique_ptr<Expression> lhs) {
     // Now merge the whole AST.
     lhs =
         std::make_unique<BinaryExpression>(std::move(lhs), op, std::move(rhs));
+  }
+}
+
+/// Traverse the AST and evaluate.
+/// _Only_ for testing purposes.
+ConstantValue Parser::eval() {
+  auto expr = parseExpression();
+  if (!expr) {
+    throw std::runtime_error("Got a nullptr after traversal");
+  }
+
+  ConstantValue value = expr->accept();
+  return value;
+}
+
+std::unique_ptr<Expression> Parser::parseConstantLiteral() {
+  auto value = *current_.constantTokenValue();
+  advance();
+  if (value.isFloatConstant()) {
+    return std::make_unique<FloatExpression>(
+        previous_.constantTokenValue()->floatConstant());
+  } else if (value.isIntegerConstant()) {
+    return std::make_unique<IntegerExpression>(
+        previous_.constantTokenValue()->intConstant());
+  }
+  return nullptr;
+}
+
+std::unique_ptr<Expression> Parser::parsePrimary() {
+  switch (current_.tokenType()) {
+  case TokenType::Constant: {
+    return parseConstantLiteral();
+  }
+  default:
+    current_.dump('\n');
+    llvm_unreachable("Unsupported expression.");
   }
 }
 
