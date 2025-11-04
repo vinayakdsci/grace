@@ -21,13 +21,6 @@
 #include <cassert>
 #include <optional>
 
-namespace {
-union ConstantValueContents {
-  double float_constant_;
-  long long int_constant_;
-};
-} // namespace
-
 namespace grace {
 namespace frontend {
 
@@ -146,6 +139,11 @@ struct ConstantValue {
   const long long &intConstant() const;
 
 private:
+  union ConstantValueContents {
+    double float_constant_;
+    long long int_constant_;
+  };
+
   ConstantTag type_tag_;
   ConstantValueContents contents_;
 };
