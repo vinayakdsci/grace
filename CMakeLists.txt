@@ -11,7 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-cmake_minimum_required(VERSION 3.29.0)
+cmake_minimum_required(VERSION 3.28.0)
 
 project(Grace)
 
@@ -30,15 +30,16 @@ add_definitions(${LLVM_DEFINITIONS_LIST})
 
 # Link the executable target to LLVM.
 add_executable(grcc grace.cc)
-llvm_map_components_to_libnames(llvm_libs support core irreader)
-target_link_libraries(grcc ${llvm_libs})
-
 # Configure the include/ dir.
 target_include_directories(grcc PUBLIC include)
 
 # Configure the src/ dir.
 add_subdirectory(src)
 target_link_libraries(grcc grcc_src)
+
+llvm_map_components_to_libnames(llvm_libs support core irreader)
+message(STATUS "Found LLVM libs ${llvm_libs}")
+target_link_libraries(grcc ${llvm_libs})
 
 # Configure the test/ dir.
 # include(CTest)
